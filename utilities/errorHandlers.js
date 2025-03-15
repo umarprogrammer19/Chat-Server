@@ -6,4 +6,4 @@ class ErrorHandler extends Error {
     };
 };
 
-export const errorHandler = ErrorHandler;
+export default ErrorHandler;
