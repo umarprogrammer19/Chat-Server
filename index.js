@@ -1,9 +1,16 @@
 import express from "express";
 import "dotenv/config";
+import connectDB from "./db/db.connection.js";
 const app = express();
 
 app.get("/", (req, res) => res.send("Chat Application"));
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server is listening on the port ${process.env.PORT || 5000}`);
-})
+connectDB()
+    .then(() => {
+        app.listen(process.env.PORT, () => {
+            console.log(`🌐✨ Server is up and running smoothly on port ${process.env.PORT}! 🚀🔥`);
+        })
+    })
+    .catch((error) => {
+        console.log(error.message);
+    })
