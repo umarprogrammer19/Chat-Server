@@ -3,6 +3,9 @@ import "dotenv/config";
 import connectDB from "./db/db.connection.js";
 const app = express();
 
+// Parse JSON
+app.use(express.json());
+
 app.get("/", (req, res) => res.send("Chat Application"));
 
 connectDB()
