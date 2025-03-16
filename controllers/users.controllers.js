@@ -3,6 +3,7 @@ import { asyncHandler } from "../utilities/asyncHandlers.js";
 import { uploadImageToCloudinary } from "../utilities/cloudinary.js";
 import ErrorHandler from "../utilities/errorHandlers.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export const registerUser = asyncHandler(async (req, res, next) => {
     const { fullname, username, password, gender } = req.body;
