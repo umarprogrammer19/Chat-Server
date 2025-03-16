@@ -83,4 +83,17 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         message: "Login Successfull",
         token
     })
+});
+
+export const getMyProfile = asyncHandler(async (req, res, next) => {
+    const userId = req.user._id;
+    if (!userId) return next(new ErrorHandler("Unauthorized", 400));
+
+    const profile = await User.findById(userId);
+    if (!profile) next(new ErrorHandler("Not Found", 404));
+
+    res.status(200).json({
+        success: true,
+        profile
+    })
 })
