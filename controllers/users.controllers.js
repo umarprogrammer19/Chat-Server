@@ -34,8 +34,10 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         avatar
     });
 
-    const tokenData = newUser?._id;
-    const token = jwt.sign({ id: tokenData }, process.env.JWT_SECRET, {
+    const tokenData = {
+        _id: newUser?._id
+    };
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRE
     });
 
@@ -65,8 +67,20 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) return next(new ErrorHandler("Incorrect username and password", 400));
 
-    res.status(200).json({
+    const tokenData = {
+        _id: user?._id
+    };
+    const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE
+    });
+    res.status(200).cookie("token", token, {
+        expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: 'None'
+    }).json({
         success: true,
-        message: "Login Successfull"
+        message: "Login Successfull",
+        token
     })
 })
