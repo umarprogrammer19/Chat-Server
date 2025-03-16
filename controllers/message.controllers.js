@@ -52,7 +52,7 @@ export const getMessages = asyncHandler(async (req, res, next) => {
 
     const conversation = await Conversation.findOne({
         participants: { $all: [userId, participantId] },
-    });
+    }).populate("messages");
 
     res.status(201).json({
         success: true,
