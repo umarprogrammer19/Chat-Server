@@ -39,3 +39,23 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
         newMessage,
     });
 });
+
+export const getMessages = asyncHandler(async (req, res, next) => {
+    if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
+
+    const userId = req.user._id;
+    if (!userId) return next(new ErrorHandler("User Not Found", 404));
+
+    const participantId = req.params.participantId;
+
+    if (!userId || !participantId) return next(new ErrorHandler("Incomplete Data", 400));
+
+    const conversation = await Conversation.findOne({
+        participants: { $all: [userId, participantId] },
+    });
+
+    res.status(201).json({
+        success: true,
+        conversation,
+    });
+})
