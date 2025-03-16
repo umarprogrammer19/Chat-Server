@@ -96,4 +96,18 @@ export const getMyProfile = asyncHandler(async (req, res, next) => {
         success: true,
         profile
     })
-})
+});
+
+export const logoutUser = asyncHandler(async (req, res, next) => {
+    res.cookie("token", "", {
+        expires: new Date(0), 
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully",
+    });
+});
