@@ -19,7 +19,8 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     let avatar;
 
     if (req.file) {
-        avatar = await uploadImageToCloudinary(req.file.path);
+        const cloudinaryResponse = await uploadImageToCloudinary(req.file.path);
+        avatar = cloudinaryResponse?.secure_url || cloudinaryResponse?.url;
     } else {
         const avatarType = gender === "male" ? "boy" : "girl";
         avatar = `https://avatar.iran.liara.run/public/${avatarType}?username=${username}`;
@@ -33,10 +34,21 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         avatar
     });
 
-    res.status(201).json({
-        sucess: true,
-        message: "Registration Successfull",
-        newUser
+    const tokenData = newUser?._id;
+    const token = jwt.sign({ id: tokenData }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE
+    });
+
+    res.status(201).cookie("token", token, {
+        expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: 'None'
+    }).json({
+        success: true,
+        message: "Registration Successful",
+        newUser,
+        token
     });
 });
 
