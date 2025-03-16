@@ -1,6 +1,7 @@
 import Message from "../models/message.models.js";
 import Conversation from "../models/conversation.models.js";
-import asyncHandler from "../utilities/asyncHandlers.js";
+import { asyncHandler } from "../utilities/asyncHandlers.js";
+import ErrorHandler from "../utilities/errorHandlers.js";
 
 export const sendMessage = asyncHandler(async (req, res, next) => {
     if (!req.user) return next(new ErrorHandler("Unauthorized", 401));

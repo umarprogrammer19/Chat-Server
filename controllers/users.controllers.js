@@ -115,7 +115,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
 export const getOtherUsers = asyncHandler(async (req, res, next) => {
     if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
     const userId = req.user._id;
-    const otherUsers = User.find({ _id: { $ne: userId } });
+    const otherUsers = await User.find({ _id: { $ne: userId } });
     res.status(200).json({
         success: true,
         otherUsers
