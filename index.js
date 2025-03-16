@@ -3,11 +3,13 @@ import "dotenv/config";
 import connectDB from "./db/db.connection.js";
 import { errorMiddleware } from "./middlewares/error.middleware.js";
 import userRouter from "./routes/auth.routes.js";
+import messageRouter from "./routes/message.routes.js";
 import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(express.json());
 app.use("/api/v1/user", userRouter);
+app.use("/api/v2/message", messageRouter);
 app.use(errorMiddleware);
 app.use(cookieParser());
 
