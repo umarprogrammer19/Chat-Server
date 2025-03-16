@@ -100,7 +100,7 @@ export const getMyProfile = asyncHandler(async (req, res, next) => {
 
 export const logoutUser = asyncHandler(async (req, res, next) => {
     res.cookie("token", "", {
-        expires: new Date(0), 
+        expires: new Date(0),
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "None",
@@ -111,3 +111,13 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
         message: "Logged out successfully",
     });
 });
+
+export const getOtherUsers = asyncHandler(async (req, res, next) => {
+    if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
+    const userId = req.user._id;
+    const otherUsers = User.find({ _id: { $ne: userId } });
+    res.status(200).json({
+        success: true,
+        otherUsers
+    });
+})
