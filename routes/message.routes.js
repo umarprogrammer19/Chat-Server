@@ -4,6 +4,6 @@ import { sendMessage } from "../controllers/message.controllers.js";
 
 const router = Router();
 
-router.post("/send", isAuthnticated, sendMessage);
+router.post("/send/:receiverId", isAuthnticated, sendMessage);
 
 export default router;
