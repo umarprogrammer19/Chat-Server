@@ -7,7 +7,6 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
 
     const senderId = req.user._id;
-
     if (!senderId) return next(new ErrorHandler("User Not Found", 404));
 
     const receiverId = req.params.receiverId;
@@ -15,15 +14,16 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 
     if (!receiverId || !message) return next(new ErrorHandler("Incomplete Data", 400));
 
-    let conversation = Conversation.findOne({
-        participants: { $all: { senderId, receiverId } },
+    let conversation = await Conversation.findOne({
+        participants: { $all: [senderId, receiverId] },
     });
 
     if (!conversation) {
         conversation = await Conversation.create({
             participants: [senderId, receiverId],
+            messages: []
         });
-    };
+    }
 
     const newMessage = await Message.create({
         senderId,
@@ -31,13 +31,11 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
         message
     });
 
-    if (newMessage) {
-        conversation.message.push(newMessage._id);
-        await conversation.save();
-    };
+    conversation.messages.push(newMessage._id);
+    await conversation.save();
 
     res.status(201).json({
-        sucess: true,
+        success: true,
         newMessage,
     });
 });
