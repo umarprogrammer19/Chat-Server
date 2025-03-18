@@ -3,6 +3,7 @@ import Conversation from "../models/conversation.models.js";
 import { asyncHandler } from "../utilities/asyncHandlers.js";
 import ErrorHandler from "../utilities/errorHandlers.js";
 
+// Send Messages API
 export const sendMessage = asyncHandler(async (req, res, next) => {
     if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
 
@@ -40,6 +41,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     });
 });
 
+// Get Messages API
 export const getMessages = asyncHandler(async (req, res, next) => {
     if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
 
