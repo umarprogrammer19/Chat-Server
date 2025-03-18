@@ -45,7 +45,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: 'None'
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     }).json({
         success: true,
         message: "Registration Successful",
@@ -53,7 +53,6 @@ export const registerUser = asyncHandler(async (req, res, next) => {
         token
     });
 });
-
 
 export const loginUser = asyncHandler(async (req, res, next) => {
     const { username, password } = req.body;
@@ -77,11 +76,12 @@ export const loginUser = asyncHandler(async (req, res, next) => {
         expires: new Date(Date.now() + process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: 'None'
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     }).json({
         success: true,
         message: "Login Successfull",
-        token
+        token,
+        user,
     })
 });
 
