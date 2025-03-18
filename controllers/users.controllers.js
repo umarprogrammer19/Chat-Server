@@ -5,6 +5,7 @@ import ErrorHandler from "../utilities/errorHandlers.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+// Register API
 export const registerUser = asyncHandler(async (req, res, next) => {
     const { fullname, username, password, gender } = req.body;
 
@@ -54,6 +55,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
     });
 });
 
+// Login API 
 export const loginUser = asyncHandler(async (req, res, next) => {
     const { username, password } = req.body;
 
@@ -85,6 +87,7 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     })
 });
 
+// Get Profile API
 export const getMyProfile = asyncHandler(async (req, res, next) => {
     const userId = req.user._id;
     if (!userId) return next(new ErrorHandler("Unauthorized", 400));
@@ -98,12 +101,13 @@ export const getMyProfile = asyncHandler(async (req, res, next) => {
     })
 });
 
+// Login User API
 export const logoutUser = asyncHandler(async (req, res, next) => {
     res.cookie("token", "", {
         expires: new Date(0),
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "None",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     });
 
     res.status(200).json({
@@ -112,6 +116,7 @@ export const logoutUser = asyncHandler(async (req, res, next) => {
     });
 });
 
+// Get Other Users API
 export const getOtherUsers = asyncHandler(async (req, res, next) => {
     if (!req.user) return next(new ErrorHandler("Unauthorized", 401));
     const userId = req.user._id;
