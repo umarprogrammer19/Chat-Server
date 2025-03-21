@@ -2,6 +2,7 @@ import Message from "../models/message.models.js";
 import Conversation from "../models/conversation.models.js";
 import { asyncHandler } from "../utilities/asyncHandlers.js";
 import ErrorHandler from "../utilities/errorHandlers.js";
+import { getSocketId, io } from "../socket/socket.js";
 
 // Send Messages API
 export const sendMessage = asyncHandler(async (req, res, next) => {
@@ -34,6 +35,9 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
 
     conversation.messages.push(newMessage._id);
     await conversation.save();
+
+    const userId = getSocketId(receiverId);
+    io.to(userId).emit("newMessage", newMessage);
 
     res.status(201).json({
         success: true,
