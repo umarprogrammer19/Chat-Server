@@ -36,6 +36,7 @@ export const sendMessage = asyncHandler(async (req, res, next) => {
     conversation.messages.push(newMessage._id);
     await conversation.save();
 
+    // Socket 
     const userId = getSocketId(receiverId);
     io.to(userId).emit("newMessage", newMessage);
 
