@@ -8,6 +8,7 @@ import messageRouter from "./routes/message.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+// Cors for checking request origin 
 const corsOption = {
     origin: "http://localhost:5173",
     credentials: true,
