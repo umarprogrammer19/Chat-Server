@@ -17,7 +17,7 @@ app.use(cors(corsOption));
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes
+// Route Handlers
 app.use("/api/v1/user", userRouter);
 app.use("/api/v2/message", messageRouter);
 
