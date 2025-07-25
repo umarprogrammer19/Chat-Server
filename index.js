@@ -8,6 +8,7 @@ import messageRouter from "./routes/message.routes.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+// Cors for checking request origin 
 const corsOption = {
     origin: "http://localhost:5173",
     credentials: true,
@@ -16,7 +17,7 @@ app.use(cors(corsOption));
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes
+// Route Handlers
 app.use("/api/v1/user", userRouter);
 app.use("/api/v2/message", messageRouter);
 
